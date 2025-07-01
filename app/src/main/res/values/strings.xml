@@ -8,10 +8,18 @@
     <string name="login">Login</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="action_settings">Settings</string>
-    <string name="create_note">Create note</string>
-    <string name="add_note">Add note</string>
+    <string name="create">Create</string>
+    <string name="new_task">New task</string>
     <string name="enter_the_title">Enter the title</string>
     <string name="enter_the_description">Enter the description</string>
     <string name="note_title">Note Title</string>
     <string name="note_content_preview_goes_here">Note content preview goes here...</string>
+    <string name="error_fill_all_fields">All fields mus be filled</string>
+    <string name="note_added">added</string>
+    <string-array name="catNames">
+        <item>Барсик</item>
+        <item>Мурзик</item>
+        <item>Васька</item>
+        <item>Рыжик</item>
+    </string-array>
 </resources>

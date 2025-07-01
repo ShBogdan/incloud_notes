@@ -53,6 +53,12 @@ class CustomAdapter(private val dataSet: MutableList<Note>, private val context:
         notifyItemMoved(fromPosition, toPosition)
     }
 
+    fun updateData(newData: List<Note>) {
+        dataSet.clear()
+        dataSet.addAll(newData)
+        notifyDataSetChanged()
+    }
+
 
 
 }

@@ -17,12 +17,13 @@ import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
 import com.incloudlogic.taskmanager.utils.SharedPreferencesManager
 
 
+
 /**
- * Главная активность для авторизации пользователя.
+ * MainActivity is the entry point for user authentication in the TaskManagerApp.
+ * <p>
+ * Handles user login, input validation, and navigation to the notes overview screen.
  */
 class MainActivity : AppCompatActivity() {
-
-//    private lateinit var binding: ActivityMainBinding
 
     private lateinit var textMailInput: TextInputLayout
     private lateinit var emailInput: TextInputEditText
@@ -30,7 +31,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var loginButton: MaterialButton
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
 
-
+    /**
+     * Called when the activity is starting. Initializes views, sets up validation and login logic.
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        binding = ActivityMainBinding.inflate(layoutInflater)
@@ -38,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         EdgeToEdgeUtils.applyEdgeToEdgePadding(R.id.main, this)
 
-        sharedPreferencesManager =  SharedPreferencesManager(this)
+        sharedPreferencesManager = SharedPreferencesManager(this)
 
         initViews()
         setupEmailValidation()
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Инициализация всех view-элементов.
+     * Initializes all view elements and pre-fills fields if user data exists.
      */
     private fun initViews() {
         textMailInput = findViewById(R.id.textMailInput)
@@ -55,20 +59,19 @@ class MainActivity : AppCompatActivity() {
         loginButton = findViewById(R.id.loginButton)
 
         val user = sharedPreferencesManager.getUser()
-        if(sharedPreferencesManager.getUser()!=null){
-            emailInput.text = SpannableStringBuilder(user?.email)
-            passwordInput.text = SpannableStringBuilder(user?.password)
+        user?.let {
+            emailInput.text = SpannableStringBuilder(it.email)
+            passwordInput.text = SpannableStringBuilder(it.password)
         }
-
     }
 
     /**
-     * Установка слушателя фокуса для проверки email.
+     * Sets up focus change listener for email validation.
      */
     private fun setupEmailValidation() {
-       emailInput.setOnFocusChangeListener { _, hasFocus ->
+        emailInput.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
-                val email = emailInput.text.toString()
+                val email = emailInput.text?.toString()?.trim() ?: ""
                 if (!isValidEmail(email)) {
                     textMailInput.error = getString(R.string.email_hint)
                 } else {
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Установка логики кнопки входа.
+     * Sets up the login button click logic.
      */
     private fun setupLoginButton() {
         loginButton.setOnClickListener {
@@ -98,21 +101,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Извлекает email из поля ввода.
+     * Extracts email from the input field.
+     * @return Trimmed email string.
      */
-    private fun extractEmail(): String {
-        return emailInput.text?.toString()?.trim() ?: ""
-    }
+    private fun extractEmail(): String = emailInput.text?.toString()?.trim() ?: ""
 
     /**
-     * Извлекает пароль из поля ввода.
+     * Extracts password from the input field.
+     * @return Trimmed password string.
      */
-    private fun extractPassword(): String {
-        return passwordInput.text?.toString()?.trim() ?: ""
-    }
+    private fun extractPassword(): String = passwordInput.text?.toString()?.trim() ?: ""
 
     /**
-     * Проверяет валидность email (gmail.com или incloudlogic.com).
+     * Validates email format (must be gmail.com or incloudlogic.com).
+     * @param email The email string to validate.
+     * @return True if email is valid, false otherwise.
      */
     private fun isValidEmail(email: String): Boolean {
         val regex = "^[A-Za-z0-9._%+-]+@(gmail\\.com|incloudlogic\\.com)$".toRegex()
@@ -120,14 +123,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Проверяет валидность введённых данных.
+     * Validates the entered credentials.
+     * @param email The email string.
+     * @param password The password string.
+     * @return True if both email and password are valid, false otherwise.
      */
     private fun validateCredentials(email: String, password: String): Boolean {
         return isValidEmail(email) && password.isNotBlank()
     }
 
     /**
-     * Навигация к экрану задач после успешной авторизации.
+     * Navigates to the notes overview screen after successful login.
      */
     private fun navigateToNotesOverviewScreen() {
         val intent = Intent(this, NotesOverviewActivity::class.java)
@@ -135,9 +141,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Вывод ошибки валидации (в реальном проекте лучше отображать конкретные ошибки).
+     * Shows a validation error (should be improved to display specific messages).
      */
     private fun showValidationError() {
-        // TODO: добавить отображение сообщений об ошибке (например, через Toast или TextInputLayout.setError)
+        // TODO: Add error message display (e.g., Toast or TextInputLayout.setError)
     }
 }
