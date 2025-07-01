@@ -36,17 +36,16 @@ class AddNoteActivity : AppCompatActivity() {
 
     private fun setupCreateNoteButton() {
         createButton.setOnClickListener {
-            val title = noteTitle.text.toString()
-            val content = noteContent.text.toString()
-            if (title.isBlank() && content.isBlank()) {
-                Toast.makeText(this, "All fields mus be filled", LENGTH_SHORT).show()
-            } else {
-                noteTitle.text?.clear()
-                noteContent.text?.clear()
-                NoteDao(this).insert(Note(UUID.randomUUID(), title, content, 1))
-                Toast.makeText(this, "$title added", LENGTH_SHORT).show()
+            val title = noteTitle.text.toString().trim()
+            val content = noteContent.text.toString().trim()
+            if (title.isBlank() || content.isBlank()) {
+                Toast.makeText(this, getString(R.string.error_fill_all_fields), LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+            NoteDao(this).insert(Note(UUID.randomUUID(), title, content, 1))
+            noteTitle.text?.clear()
+            noteContent.text?.clear()
+            Toast.makeText(this, "$title ${getString(R.string.note_added)}", LENGTH_SHORT).show()
         }
     }
-
 }

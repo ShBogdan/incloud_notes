@@ -14,4 +14,6 @@
     <string name="enter_the_description">Enter the description</string>
     <string name="note_title">Note Title</string>
     <string name="note_content_preview_goes_here">Note content preview goes here...</string>
+    <string name="error_fill_all_fields">All fields mus be filled</string>
+    <string name="note_added">added</string>
 </resources>
