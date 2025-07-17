@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/noteCard"
+    android:id="@+id/taskCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginTop="6dp"
     android:layout_marginEnd="8dp"
-    android:background="@drawable/note_border"
+    android:background="@drawable/task_border"
     android:clickable="true"
     android:focusable="true">
 
@@ -18,37 +18,51 @@
         android:padding="12dp">
 
         <ImageView
-            android:id="@+id/priorityIndicator"
+            android:id="@+id/state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/noteTitle"
-            android:layout_alignParentEnd="false"
-            android:layout_marginStart="12dp"
+            android:layout_alignTop="@+id/title"
+            android:layout_marginStart="8dp"
+            android:layout_alignParentStart="true"
+            android:clickable="true"
+            android:src="@drawable/check_box_blank_24" />
+
+        <ImageView
+            android:id="@+id/priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/title"
+            android:layout_marginEnd="8dp"
             android:src="@drawable/priority_normal_24" />
 
         <TextView
-            android:id="@+id/noteTitle"
+            android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="42dp"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/state"
+            android:layout_toStartOf="@id/priority"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@string/note_title"
+            android:text="@string/task_title"
             android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/noteContent"
+            android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/noteTitle"
+            android:layout_below="@id/title"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
             android:ellipsize="end"
             android:maxLines="3"
-            android:text="@string/note_content_preview_goes_here"
+            android:text="@string/task_content_preview_goes_here"
             android:textSize="14sp" />
 
+
     </RelativeLayout>
+
 
 </LinearLayout>

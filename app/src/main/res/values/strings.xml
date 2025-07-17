@@ -12,14 +12,20 @@
     <string name="new_task">New task</string>
     <string name="enter_the_title">Enter the title</string>
     <string name="enter_the_description">Enter the description</string>
-    <string name="note_title">Note Title</string>
-    <string name="note_content_preview_goes_here">Note content preview goes here...</string>
+    <string name="task_title">Task Title</string>
+    <string name="task_content_preview_goes_here">Task content preview goes here...</string>
     <string name="error_fill_all_fields">All fields mus be filled</string>
-    <string name="note_added">added</string>
-    <string-array name="catNames">
-        <item>Барсик</item>
-        <item>Мурзик</item>
-        <item>Васька</item>
-        <item>Рыжик</item>
+    <string name="task_added">added</string>
+    <string name="delete_task">Delete task</string>
+    <string name="delete_task_confirmation">Are you sure you want to delete this task?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="icplatform">ICPlatform</string>
+    <string name="offline_mode_no_login_required">Offline Mode (No Login Required)</string>
+    <string-array name="tasks">
+        <item>IncidentTracker</item>
+        <item>ChangeMonitor</item>
+        <item>AssetManager</item>
+        <item>RequestFlow</item>
     </string-array>
 </resources>
