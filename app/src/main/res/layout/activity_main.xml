@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-
     android:layout_margin="32dp"
     tools:context=".MainActivity">
 
@@ -20,8 +19,7 @@
             android:layout_width="160dp"
             android:layout_height="160dp"
             android:layout_marginBottom="32dp"
-            android:src="@drawable/logo_incloudlogic"
-            />
+            android:src="@drawable/logo_incloudlogic" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textMailInput"
@@ -41,6 +39,7 @@
             android:id="@+id/textPasswordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:hint="@string/password"
             app:endIconMode="password_toggle">
 
@@ -51,21 +50,46 @@
                 android:inputType="textPassword" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textURLInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:hint="@string/icplatform">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/URLInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textUri" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <CheckBox
+            android:id="@+id/offlineMode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/offline_mode_no_login_required">
+
+        </CheckBox>
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/loginButton"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="18dp"
             android:layout_marginTop="32dp"
+
             android:text="@string/login"
             app:cornerRadius="8dp" />
+
+
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:layout_marginTop="96dp"
+            android:layout_marginTop="64dp"
             android:fontFamily="sans-serif-light"
             android:text="@string/_2025_incloudlogic_llc" />
     </LinearLayout>

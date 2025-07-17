@@ -12,10 +12,10 @@ class SharedPreferencesManager(context: Context) {
         context.getSharedPreferences("LoggedIn", Context.MODE_PRIVATE)
     private val spEditor = sharedPreference.edit()
 
-    fun saveCredentialsToPrefs(mail: String, password: String) {
+    fun saveCredentialsToPrefs(mail: String, password: String, url: String) {
         spEditor.putString(SP_EMAIL, mail)
         spEditor.putString(SP_PASSWORD, password)
-        spEditor.putString(SP_PASSWORD, password)
+        spEditor.putString(SP_URL, url)
         spEditor.apply()
     }
 
@@ -24,7 +24,7 @@ class SharedPreferencesManager(context: Context) {
         val password = sharedPreference.getString(SP_PASSWORD, null)
         val url = sharedPreference.getString(SP_URL, null)
 
-        return if (email != null && password != null) {
+        return if (email != null && password != null && url != null) {
             User(email, password, url)
         } else {
             null

@@ -13,21 +13,19 @@
         android:theme="@style/Theme.TaskManagerApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.AddNoteActivity"
+            android:name=".ui.AddTaskActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.NotesOverviewActivity"
+            android:name=".ui.TasksOverviewActivity"
             android:exported="false"
-            android:label="@string/title_activity_scrolling"
             android:theme="@style/Theme.TaskManagerApp.NoActionBar" />
 
         <meta-data

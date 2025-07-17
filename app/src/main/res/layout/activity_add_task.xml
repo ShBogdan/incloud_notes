@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="16dp"
-    tools:context=".ui.AddNoteActivity">
+    tools:context=".ui.AddTaskActivity">
 
     <TextView
-        android:id="@+id/addNoteHeading"
+        android:id="@+id/addTaskHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -19,27 +19,27 @@
         android:textSize="24sp" />
 
     <Spinner
-        android:id="@+id/noteTitle"
+        android:id="@+id/taskTitle"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_below="@+id/addNoteHeading"
+        android:layout_below="@+id/addTaskHeading"
         android:layout_marginTop="15dp"
-        android:background="@drawable/note_border"
+        android:background="@drawable/task_border"
         android:hint="@string/enter_the_title"
         android:maxLines="1"
         android:padding="12dp"
         android:textSize="20sp"
-        android:entries="@array/catNames"/>
+        android:entries="@array/tasks"/>
 
 
 
     <EditText
-        android:id="@+id/noteContent"
+        android:id="@+id/taskContent"
         android:layout_width="match_parent"
         android:layout_height="360dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/note_border"
-        android:layout_below="@+id/noteTitle"
+        android:background="@drawable/task_border"
+        android:layout_below="@+id/taskTitle"
         android:gravity="top"
         android:hint="@string/enter_the_description"
         android:padding="12dp"
@@ -50,7 +50,7 @@
         android:id="@+id/createButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/noteContent"
+        android:layout_below="@+id/taskContent"
         android:padding="18dp"
         android:layout_marginTop="32dp"
         android:text="@string/create"
