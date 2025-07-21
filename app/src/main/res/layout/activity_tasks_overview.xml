@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,20 +7,82 @@
     android:layout_height="match_parent"
     tools:context=".ui.TasksOverviewActivity">
 
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/sort_buttons_layout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:titleTextColor="@android:color/white" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:gravity="center"
+        app:singleSelection="true"
+        app:selectionRequired="false">
 
+
+        <!-- Кнопка с текстом -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_sort_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:text="Sorting"
+            android:textAlignment="textEnd"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+        <!-- Кнопки с иконками -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_sort_complete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/check_box_24"
+            app:iconGravity="textEnd"
+            app:iconTint="?attr/colorOnSurface"
+            app:iconSize="24dp"
+            android:text=""
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_sort_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:iconGravity="textEnd"
+            app:iconTint="?attr/colorOnSurface"
+            app:iconSize="24dp"
+            android:text="T"
+            android:textStyle="bold"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_sort_priority"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:icon="@drawable/priority_normal_24"
+            app:iconGravity="textEnd"
+            app:iconTint="?attr/colorOnSurface"
+            app:iconSize="24dp"
+            android:text=""
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/sort_buttons_layout"
+        android:background="?attr/colorSurface"
+        app:tabIndicatorColor="?attr/colorPrimary"
+        app:tabSelectedTextColor="?attr/colorPrimary"
+        app:tabTextColor="?android:attr/textColorPrimary" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar" />
+        android:layout_below="@id/tabLayout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addButton"

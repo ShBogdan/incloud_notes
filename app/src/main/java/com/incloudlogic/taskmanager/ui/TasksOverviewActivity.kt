@@ -16,6 +16,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.incloudlogic.taskmanager.R
@@ -36,6 +41,7 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
 
     private lateinit var addButton: FloatingActionButton
     private lateinit var viewPager: ViewPager2
+    private lateinit var tabLayout: TabLayout
     private lateinit var dao: TaskDao
     private var context: Context = this
 
@@ -52,14 +58,13 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
         enableEdgeToEdge()
         setContentView(R.layout.activity_tasks_overview)
         EdgeToEdgeUtils.applyEdgeToEdgePadding(R.id.main, this)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
 
         offlineMode = intent.getBooleanExtra("offlineMode", false)
 
         initViews()
         setupAddButton()
         setupViewPager()
+        setupSortButtons()
     }
 
     override fun onResume() {
@@ -70,6 +75,7 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
     private fun initViews() {
         addButton = findViewById(R.id.addButton)
         viewPager = findViewById(R.id.view_pager)
+        tabLayout = findViewById(R.id.tabLayout)
     }
 
     private fun setupAddButton() {
@@ -96,8 +102,14 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
 
         updateData()
 
-        // Set up ViewPager2
-        viewPager.adapter = TaskPagerAdapter()
+        // Set up ViewPager2 with FragmentStateAdapter
+        viewPager.adapter = TasksPagerFragmentAdapter(this)
+
+        // TabLayoutMediator to bind tabs with ViewPager2
+        val tabTitles = if (offlineMode) listOf("Local Tasks") else listOf("Local Tasks", "ICPlatform Tasks")
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
 
         // Set initial title
         supportActionBar?.title =
@@ -138,31 +150,44 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
         updateData()
     }
 
-    // ViewPager2 Adapter
-    inner class TaskPagerAdapter : RecyclerView.Adapter<TaskPagerAdapter.PageViewHolder>() {
+    // Minimal FragmentStateAdapter for ViewPager2
+    inner class TasksPagerFragmentAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+        override fun getItemCount(): Int = if (offlineMode) 1 else 2
 
-        inner class PageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        override fun createFragment(position: Int): Fragment {
+            return TasksPageFragment.newInstance(position)
+        }
+    }
+
+    // Fragment displaying a RecyclerView for each page
+    class TasksPageFragment : Fragment() {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            val view = inflater.inflate(R.layout.page_recycler_view, container, false)
+            val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view)
+
+            val activity = requireActivity() as TasksOverviewActivity
+            val position = arguments?.getInt(ARG_POSITION) ?: 0
+            val adapter = if (activity.offlineMode || position == 0) activity.localAdapter else activity.icPlatformAdapter
+
+            recyclerView.layoutManager = LinearLayoutManager(activity)
+            recyclerView.adapter = adapter
+
+            val itemTouchHelper = ItemTouchHelper(activity.createItemTouchCallback(adapter))
+            itemTouchHelper.attachToRecyclerView(recyclerView)
+
+            return view
         }
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PageViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.page_recycler_view, parent, false)
-            return PageViewHolder(view)
+        companion object {
+            private const val ARG_POSITION = "position"
+            fun newInstance(position: Int): TasksPageFragment {
+                val fragment = TasksPageFragment()
+                val args = Bundle()
+                args.putInt(ARG_POSITION, position)
+                fragment.arguments = args
+                return fragment
+            }
         }
-
-        override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-            val adapter = if (offlineMode || position == 0) localAdapter else icPlatformAdapter
-
-            holder.recyclerView.layoutManager = LinearLayoutManager(context)
-            holder.recyclerView.adapter = adapter
-
-            // Set up ItemTouchHelper for swipe-to-delete
-            val itemTouchHelper = ItemTouchHelper(createItemTouchCallback(adapter))
-            itemTouchHelper.attachToRecyclerView(holder.recyclerView)
-        }
-
-        override fun getItemCount(): Int = if (offlineMode) 1 else 2 // One page if offlineMode, else two
     }
 
     private fun createItemTouchCallback(adapter: CustomAdapter) =
@@ -202,43 +227,41 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
             }
         }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_tasks_overview, menu)
-        return true
-    }
+    // Remove menu-based sorting, replaced by buttons
+    private fun setupSortButtons() {
+        val buttonComplete = findViewById<View>(R.id.button_sort_complete)
+        val buttonTitle = findViewById<View>(R.id.button_sort_title)
+        val buttonPriority = findViewById<View>(R.id.button_sort_priority)
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val data = dao.getAll()
-        val sorted = when (item.itemId) {
-            R.id.sort_complete -> {
-                isStateAsc = !isStateAsc
-                if (isStateAsc) data.sortedBy { it.isCompleted } else data.sortedByDescending { it.isCompleted }
-            }
-
-            R.id.sort_title -> {
-                isTitleAsc = !isTitleAsc
-                if (isTitleAsc) data.sortedBy { it.title } else data.sortedByDescending { it.title }
-            }
-
-            R.id.sort_priority -> {
-                isPriorityAsc = !isPriorityAsc
-                if (isPriorityAsc) data.sortedBy { it.priority } else data.sortedByDescending { it.priority }
-            }
-
-            else -> return super.onOptionsItemSelected(item)
+        buttonComplete.setOnClickListener {
+            val data = dao.getAll()
+            isStateAsc = !isStateAsc
+            val sorted = if (isStateAsc) data.sortedBy { it.isCompleted } else data.sortedByDescending { it.isCompleted }
+            updateSortedTasks(sorted)
         }
 
-        // Update data with sorted results
+        buttonTitle.setOnClickListener {
+            val data = dao.getAll()
+            isTitleAsc = !isTitleAsc
+            val sorted = if (isTitleAsc) data.sortedBy { it.title } else data.sortedByDescending { it.title }
+            updateSortedTasks(sorted)
+        }
+
+        buttonPriority.setOnClickListener {
+            val data = dao.getAll()
+            isPriorityAsc = !isPriorityAsc
+            val sorted = if (isPriorityAsc) data.sortedBy { it.priority } else data.sortedByDescending { it.priority }
+            updateSortedTasks(sorted)
+        }
+    }
+
+    private fun updateSortedTasks(sorted: List<Task>) {
         localTasks.clear()
         icPlatformTasks.clear()
-
         localTasks.addAll(sorted.filter { it.isLocal })
         icPlatformTasks.addAll(sorted.filter { !it.isLocal })
-
         localAdapter.notifyDataSetChanged()
         icPlatformAdapter.notifyDataSetChanged()
-
-        return true
     }
 
     override fun onDestroy() {
