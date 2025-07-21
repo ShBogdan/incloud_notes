@@ -25,7 +25,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textMailInput: TextInputLayout
     private lateinit var emailInput: TextInputEditText
     private lateinit var passwordInput: TextInputEditText
+    private lateinit var textPasswordInput: TextInputLayout
     private lateinit var URLInput: TextInputEditText
+    private lateinit var textURLInput: TextInputLayout
     private lateinit var offlineMode: CheckBox
     private lateinit var loginButton: MaterialButton
     private lateinit var sharedPreferencesManager: SharedPreferencesManager
@@ -47,14 +49,38 @@ class MainActivity : AppCompatActivity() {
         textMailInput = findViewById(R.id.textMailInput)
         emailInput = findViewById(R.id.emailInput)
         passwordInput = findViewById(R.id.passwordInput)
+        textPasswordInput = findViewById(R.id.textPasswordInput)
         loginButton = findViewById(R.id.loginButton)
         URLInput = findViewById(R.id.URLInput)
+        textURLInput = findViewById(R.id.textURLInput)
         offlineMode = findViewById(R.id.offlineMode)
 
         offlineMode.setOnCheckedChangeListener { _, isChecked ->
             emailInput.isEnabled = !isChecked
             passwordInput.isEnabled = !isChecked
             URLInput.isEnabled = !isChecked
+
+            // Hide password toggle if offlineMode is checked
+            textPasswordInput.endIconMode =
+                if (isChecked) TextInputLayout.END_ICON_NONE else TextInputLayout.END_ICON_PASSWORD_TOGGLE
+
+            val darkerGray = getColor(android.R.color.darker_gray)
+            val blackColor = getColor(android.R.color.black)
+            if (isChecked) {
+                textMailInput.defaultHintTextColor = android.content.res.ColorStateList.valueOf(darkerGray)
+                emailInput.setHintTextColor(darkerGray)
+                textPasswordInput.defaultHintTextColor = android.content.res.ColorStateList.valueOf(darkerGray)
+                passwordInput.setHintTextColor(darkerGray)
+                textURLInput.defaultHintTextColor = android.content.res.ColorStateList.valueOf(darkerGray)
+                URLInput.setHintTextColor(darkerGray)
+            } else {
+                textMailInput.defaultHintTextColor = android.content.res.ColorStateList.valueOf(blackColor)
+                emailInput.setHintTextColor(blackColor)
+                textPasswordInput.defaultHintTextColor = android.content.res.ColorStateList.valueOf(blackColor)
+                passwordInput.setHintTextColor(blackColor)
+                textURLInput.defaultHintTextColor = android.content.res.ColorStateList.valueOf(blackColor)
+                URLInput.setHintTextColor(blackColor)
+            }
         }
 
         val user = sharedPreferencesManager.getUser()
