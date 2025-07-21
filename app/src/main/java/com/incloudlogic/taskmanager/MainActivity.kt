@@ -142,6 +142,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToTasksOverviewScreen() {
         val intent = Intent(this, TasksOverviewActivity::class.java)
+        intent.putExtra("offlineMode", offlineMode.isChecked)
         startActivity(intent)
     }
 

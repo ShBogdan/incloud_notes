@@ -45,6 +45,8 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
     private lateinit var localAdapter: CustomAdapter
     private lateinit var icPlatformAdapter: CustomAdapter
 
+    private var offlineMode: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -52,6 +54,8 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
         EdgeToEdgeUtils.applyEdgeToEdgePadding(R.id.main, this)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        offlineMode = intent.getBooleanExtra("offlineMode", false)
 
         initViews()
         setupAddButton()
@@ -97,13 +101,17 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
 
         // Set initial title
         supportActionBar?.title =
-            if (viewPager.currentItem == 0) "Local Tasks" else "ICPlatform Tasks"
+            if (offlineMode || viewPager.currentItem == 0) "Local Tasks" else "ICPlatform Tasks"
 
         // Listen for page changes to update title
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                supportActionBar?.title = if (position == 0) "Local Tasks" else "ICPlatform Tasks"
+                if (offlineMode) {
+                    supportActionBar?.title = "Local Tasks"
+                } else {
+                    supportActionBar?.title = if (position == 0) "Local Tasks" else "ICPlatform Tasks"
+                }
             }
         })
     }
@@ -144,7 +152,7 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
         }
 
         override fun onBindViewHolder(holder: PageViewHolder, position: Int) {
-            val adapter = if (position == 0) localAdapter else icPlatformAdapter
+            val adapter = if (offlineMode || position == 0) localAdapter else icPlatformAdapter
 
             holder.recyclerView.layoutManager = LinearLayoutManager(context)
             holder.recyclerView.adapter = adapter
@@ -154,7 +162,7 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
             itemTouchHelper.attachToRecyclerView(holder.recyclerView)
         }
 
-        override fun getItemCount(): Int = 2 // Two pages: local and icPlatform
+        override fun getItemCount(): Int = if (offlineMode) 1 else 2 // One page if offlineMode, else two
     }
 
     private fun createItemTouchCallback(adapter: CustomAdapter) =
