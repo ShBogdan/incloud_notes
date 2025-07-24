@@ -1,4 +1,4 @@
-package com.incloudlogic.taskmanager.utils
+package com.incloudlogic.taskmanager.data.local
 
 import android.content.Context
 import android.content.SharedPreferences

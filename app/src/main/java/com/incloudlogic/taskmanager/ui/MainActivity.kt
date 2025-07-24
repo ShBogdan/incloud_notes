@@ -1,12 +1,10 @@
-package com.incloudlogic.taskmanager
+package com.incloudlogic.taskmanager.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.widget.CheckBox
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.enableEdgeToEdge
@@ -14,10 +12,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.incloudlogic.taskmanager.databinding.ActivityMainBinding
-import com.incloudlogic.taskmanager.ui.TasksOverviewActivity
+import com.incloudlogic.taskmanager.R
 import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
-import com.incloudlogic.taskmanager.utils.SharedPreferencesManager
+import com.incloudlogic.taskmanager.data.local.SharedPreferencesManager
 
 
 class MainActivity : AppCompatActivity() {

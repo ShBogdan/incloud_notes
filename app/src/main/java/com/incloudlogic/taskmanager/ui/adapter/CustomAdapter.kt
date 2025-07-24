@@ -1,6 +1,5 @@
-package com.incloudlogic.taskmanager.utils
+package com.incloudlogic.taskmanager.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +8,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.incloudlogic.taskmanager.R
 import com.incloudlogic.taskmanager.domain.entity.Task
+import com.incloudlogic.taskmanager.ui.listener.OnTaskCompletedClickListener
 import java.util.Collections
 import java.util.UUID
 
 class CustomAdapter(
     private val dataSet: MutableList<Task>,
-    private val listener: OnTaskCompletedClickListener
+    private val listener: OnTaskCompletedClickListener,
+    private val onTaskClickListener: (Task) -> Unit
 ) :
     RecyclerView.Adapter<CustomAdapter.TaskViewHolder>() {
 
@@ -67,7 +68,7 @@ class CustomAdapter(
         }
 
         taskViewHolder.itemView.setOnClickListener {
-            Log.d("TaskItemClick", "Clicked on item")
+            onTaskClickListener(task)
         }
     }
 

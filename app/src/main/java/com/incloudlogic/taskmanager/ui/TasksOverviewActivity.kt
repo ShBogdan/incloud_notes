@@ -10,24 +10,20 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.incloudlogic.taskmanager.R
 import com.incloudlogic.taskmanager.data.local.TaskDao
 import com.incloudlogic.taskmanager.domain.entity.Task
-import com.incloudlogic.taskmanager.utils.CustomAdapter
+import com.incloudlogic.taskmanager.ui.adapter.CustomAdapter
 import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
-import com.incloudlogic.taskmanager.utils.OnTaskCompletedClickListener
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.incloudlogic.taskmanager.ui.listener.OnTaskCompletedClickListener
 import java.util.UUID
 
 class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener {
@@ -89,13 +85,28 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
         startActivity(intent)
     }
 
+    private fun navigateToEditTaskScreen(task: Task) {
+        val intent = Intent(this, AddTaskActivity::class.java)
+        intent.putExtra("taskId", task.id.toString())
+        intent.putExtra("taskTitle", task.title)
+        intent.putExtra("taskContent", task.content)
+        intent.putExtra("taskPriority", task.priority)
+        intent.putExtra("isLocal", task.isLocal)
+        intent.putExtra("isEditMode", true)
+        startActivity(intent)
+    }
+
     private fun setupViewPager() {
         dao = TaskDao(this)
         initDb()
 
         // Initialize adapters
-        localAdapter = CustomAdapter(localTasks, this)
-        icPlatformAdapter = CustomAdapter(icPlatformTasks, this)
+        localAdapter = CustomAdapter(localTasks, this) { task ->
+            navigateToEditTaskScreen(task)
+        }
+        icPlatformAdapter = CustomAdapter(icPlatformTasks, this) { task ->
+            navigateToEditTaskScreen(task)
+        }
 
         updateData()
 

@@ -17,6 +17,7 @@ import java.util.UUID
 class AddTaskActivity : AppCompatActivity() {
 
     private lateinit var taskTitle: Spinner
+    private lateinit var taskPriority: Spinner
     private lateinit var taskContent: EditText
     private lateinit var createButton: MaterialButton
 
@@ -31,23 +32,85 @@ class AddTaskActivity : AppCompatActivity() {
 
     private fun initViews() {
         taskTitle = findViewById(R.id.taskTitle)
+        taskPriority = findViewById(R.id.taskPriority)
         taskContent = findViewById(R.id.taskContent)
         createButton = findViewById(R.id.createButton)
     }
 
     private fun setupCreateTaskButton() {
+        val isEditMode = intent.getBooleanExtra("isEditMode", false)
+        val taskId = intent.getStringExtra("taskId")?.let { UUID.fromString(it) }
+        
+        if (isEditMode && taskId != null) {
+            // Pre-fill fields for editing
+            val title = intent.getStringExtra("taskTitle") ?: ""
+            val content = intent.getStringExtra("taskContent") ?: ""
+            val priority = intent.getIntExtra("taskPriority", 0)
+            
+            // Set spinner values
+            val titlePosition = getTitlePosition(title)
+            val priorityPosition = getPriorityPosition(priority)
+            
+            taskTitle.setSelection(titlePosition)
+            taskPriority.setSelection(priorityPosition)
+            taskContent.setText(content)
+            
+            createButton.text = getString(R.string.update)
+        }
+
         createButton.setOnClickListener {
             val title = taskTitle.selectedItem.toString().trim()
+            val priorityText = taskPriority.selectedItem.toString().trim()
             val content = taskContent.text.toString().trim()
+            
             if (title.isBlank() || content.isBlank()) {
                 Toast.makeText(this, getString(R.string.error_fill_all_fields), LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val isLocal = intent.getBooleanExtra("isLocal", true)
-            TaskDao(this).insert(Task(UUID.randomUUID(), title, content, 1, false, isLocal))
-            taskContent.text?.clear()
-            Toast.makeText(this, "$title ${getString(R.string.task_added)}", LENGTH_SHORT).show()
+            
+            val priority = when (priorityText) {
+                "Normal" -> 2
+                "Major" -> 1
+                "Critical" -> 0
+                else -> 2
+            }
+            
+            val taskDao = TaskDao(this)
+            
+            if (isEditMode && taskId != null) {
+                // Update existing task
+                val existingTask = taskDao.getById(taskId)
+                if (existingTask != null) {
+                    val updatedTask = existingTask.copy(
+                        title = title,
+                        content = content,
+                        priority = priority
+                    )
+                    taskDao.update(updatedTask)
+                    Toast.makeText(this, getString(R.string.task_updated), LENGTH_SHORT).show()
+                }
+            } else {
+                // Create new task
+                val isLocal = intent.getBooleanExtra("isLocal", true)
+                taskDao.insert(Task(UUID.randomUUID(), title, content, priority, false, isLocal))
+                Toast.makeText(this, "$title ${getString(R.string.task_added)}", LENGTH_SHORT).show()
+            }
+            
             finish()
+        }
+    }
+
+    private fun getTitlePosition(title: String): Int {
+        val titles = resources.getStringArray(R.array.tasks)
+        return titles.indexOf(title).takeIf { it >= 0 } ?: 0
+    }
+
+    private fun getPriorityPosition(priority: Int): Int {
+        return when (priority) {
+            0 -> 0 // Normal
+            1 -> 1 // Major
+            2 -> 2 // Critical
+            else -> 0
         }
     }
 }
