@@ -29,4 +29,9 @@
         <item>AssetManager</item>
         <item>RequestFlow</item>
     </string-array>
+    <string-array name="priority">
+        <item>Normal</item>
+        <item>Major</item>
+        <item>Critical</item>
+    </string-array>
 </resources>

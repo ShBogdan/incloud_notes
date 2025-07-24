@@ -23,4 +23,9 @@
     <style name="Theme.TaskManagerApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.TaskManagerApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="CustomSpinnerStyle" parent="Widget.AppCompat.Spinner">
+        <item name="android:popupBackground">@color/tab_background</item>
+        <item name="android:dropDownSelector">@color/tab_background</item>
+    </style>
 </resources>
