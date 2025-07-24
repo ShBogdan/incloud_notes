@@ -81,6 +81,19 @@ class CustomAdapter(
         notifyItemMoved(fromPosition, toPosition)
     }
 
+    fun saveSortOrder() {
+        // Update sortOrder values based on current positions
+        val updatedTasks = dataSet.mapIndexed { index, task ->
+            task.copy(sortOrder = index)
+        }
+        
+        // Update the dataset
+        dataSet.clear()
+        dataSet.addAll(updatedTasks)
+    }
+
+    fun getTasks(): List<Task> = dataSet.toList()
+
     fun updateData(newData: List<Task>) {
         dataSet.clear()
         dataSet.addAll(newData)

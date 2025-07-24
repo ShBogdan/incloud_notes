@@ -223,6 +223,13 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             }
+
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                // Save the new sort order to database when drag is complete
+                adapter.saveSortOrder()
+                dao.updateSortOrders(adapter.getTasks())
+            }
         }
 
     // Remove menu-based sorting, replaced by buttons
@@ -277,7 +284,8 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
                 "Clean all plates, cups, and cutlery after dinner.",
                 1,
                 false,
-                false
+                false,
+                0
             ),
             Task(
                 UUID.randomUUID(),
@@ -285,7 +293,8 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
                 "Vacuum carpets, under the sofa, and corners of the room.",
                 2,
                 false,
-                false
+                false,
+                1
             ),
             Task(
                 UUID.randomUUID(),
@@ -293,7 +302,8 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
                 "Empty all bins and take trash bags outside.",
                 0,
                 false,
-                false
+                false,
+                2
             ),
             Task(
                 UUID.randomUUID(),
@@ -301,7 +311,8 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
                 "Scrub sink, toilet, bathtub, and wipe down all surfaces.",
                 2,
                 true,
-                true
+                true,
+                3
             ),
             Task(
                 UUID.randomUUID(),
@@ -309,20 +320,22 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
                 "Sort clothes, fold items, and remove unused garments.",
                 2,
                 true,
-                false
+                false,
+                4
             ),
         )
 
         if (dao.getAll().isEmpty()) {
-            dataset.forEach {
+            dataset.forEachIndexed { index, task ->
                 dao.insert(
                     Task(
                         UUID.randomUUID(),
-                        it.title,
-                        it.content,
-                        it.priority,
-                        it.isCompleted,
-                        it.isLocal
+                        task.title,
+                        task.content,
+                        task.priority,
+                        task.isCompleted,
+                        task.isLocal,
+                        index
                     )
                 )
             }
