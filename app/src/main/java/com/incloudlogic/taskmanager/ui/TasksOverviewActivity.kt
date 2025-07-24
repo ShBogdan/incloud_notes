@@ -21,8 +21,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.incloudlogic.taskmanager.R
-import com.incloudlogic.taskmanager.data.TaskDao
-import com.incloudlogic.taskmanager.model.Task
+import com.incloudlogic.taskmanager.data.local.TaskDao
+import com.incloudlogic.taskmanager.domain.entity.Task
 import com.incloudlogic.taskmanager.utils.CustomAdapter
 import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
 import com.incloudlogic.taskmanager.utils.OnTaskCompletedClickListener

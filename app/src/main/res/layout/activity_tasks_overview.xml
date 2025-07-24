@@ -74,10 +74,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/sort_buttons_layout"
-        android:background="?attr/colorSurface"
-        app:tabIndicatorColor="?attr/colorPrimary"
-        app:tabSelectedTextColor="?attr/colorPrimary"
-        app:tabTextColor="?android:attr/textColorPrimary" />
+        android:background="@color/tab_background"
+        app:tabIndicatorColor="@color/tab_indicator_layout"
+        app:tabSelectedTextColor="@color/tab_selected_text"
+        app:tabTextColor="@color/tab_text"
+        />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
@@ -93,6 +94,8 @@
         android:layout_alignParentEnd="true"
         android:layout_margin="16dp"
         android:src="@drawable/baseline_add_24"
+        app:backgroundTint="@color/color_primary"
+        app:tint="@color/tab_background"
         android:contentDescription="@string/create" />
 
 </RelativeLayout>

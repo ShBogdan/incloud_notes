@@ -1,16 +1,23 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
+
+<!--    add task and login-->
     <style name="Base.Theme.TaskManagerApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="android:windowBackground">@color/main</item>
+        <item name="android:popupBackground">@color/tab_background</item>
     </style>
 
     <style name="Theme.TaskManagerApp" parent="Base.Theme.TaskManagerApp" />
 
+<!--    //recycle-->
     <style name="Theme.TaskManagerApp.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-<!--        <item name="android:windowBackground">@color/main</item>-->
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="android:windowBackground">@color/main</item>
+        <item name="android:popupBackground">@color/tab_background</item>
     </style>
 
     <style name="Theme.TaskManagerApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

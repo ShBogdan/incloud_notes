@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.incloudlogic.taskmanager.R
-import com.incloudlogic.taskmanager.model.Task
+import com.incloudlogic.taskmanager.domain.entity.Task
 import java.util.Collections
 import java.util.UUID
 

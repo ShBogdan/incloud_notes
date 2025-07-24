@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FF0000</color>
-    <color name="main">#E3E9E0</color>
+    <color name="main">#FFFFFF</color>
+    <color name="task_border">#d7dadb</color>
+    <color name="color_primary">#497371</color>
+
+    <color name="priority_normal">#4CAF50</color>
+    <color name="priority_major">#FF9800</color>
+    <color name="priority_critical">#F44336</color>
+
+    <color name="tab_indicator_layout">#59cee3</color>
+    <color name="tab_selected_text">#283878</color>
+    <color name="tab_text">#686B83</color>
+    <color name="tab_background">#F6F6F6</color>
+
 </resources>
