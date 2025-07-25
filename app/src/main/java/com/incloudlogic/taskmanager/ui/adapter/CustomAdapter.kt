@@ -92,6 +92,11 @@ class CustomAdapter(
         dataSet.addAll(updatedTasks)
     }
 
+    fun removeAt(position: Int) {
+        dataSet.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
     fun getTasks(): List<Task> = dataSet.toList()
 
     fun updateData(newData: List<Task>) {

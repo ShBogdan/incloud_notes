@@ -23,16 +23,14 @@ class TasksDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME,
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        if (oldVersion < 2) {
-            // Add sort_order column to existing table
-            db.execSQL("ALTER TABLE $TABLE_NAME ADD COLUMN sort_order INTEGER NOT NULL DEFAULT 0")
-        }
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
     }
 
     companion object {
-        const val DB_NAME = "tasks6.db"
-        const val DB_VERSION = 2
-        const val TABLE_NAME = "tasks6"
+        const val DB_NAME = "tasksDb.db"
+        const val DB_VERSION = 1
+        const val TABLE_NAME = "tasksDb"
     }
 
 }

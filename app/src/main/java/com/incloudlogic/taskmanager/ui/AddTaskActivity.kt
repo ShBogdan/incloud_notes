@@ -9,8 +9,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import com.incloudlogic.taskmanager.R
-import com.incloudlogic.taskmanager.data.TaskDao
-import com.incloudlogic.taskmanager.model.Task
+import com.incloudlogic.taskmanager.data.local.TaskDao
+import com.incloudlogic.taskmanager.domain.entity.Task
 import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
 import java.util.UUID
 
@@ -45,12 +45,12 @@ class AddTaskActivity : AppCompatActivity() {
             // Pre-fill fields for editing
             val title = intent.getStringExtra("taskTitle") ?: ""
             val content = intent.getStringExtra("taskContent") ?: ""
-            val priority = intent.getIntExtra("taskPriority", 0)
+            val priority = intent.getIntExtra("taskPriority", 2)
             
             // Set spinner values
             val titlePosition = getTitlePosition(title)
-            val priorityPosition = getPriorityPosition(priority)
-            
+            val priorityPosition = priority
+
             taskTitle.setSelection(titlePosition)
             taskPriority.setSelection(priorityPosition)
             taskContent.setText(content)
@@ -105,12 +105,4 @@ class AddTaskActivity : AppCompatActivity() {
         return titles.indexOf(title).takeIf { it >= 0 } ?: 0
     }
 
-    private fun getPriorityPosition(priority: Int): Int {
-        return when (priority) {
-            0 -> 0 // Normal
-            1 -> 1 // Major
-            2 -> 2 // Critical
-            else -> 0
-        }
-    }
 }

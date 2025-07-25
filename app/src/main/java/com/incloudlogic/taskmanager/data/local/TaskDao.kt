@@ -76,6 +76,40 @@ class TaskDao(context: Context) {
         return tasks
     }
 
+    fun getById(taskId: UUID): Task? {
+        val db = dbHelper.readableDatabase
+        val cursor = db.query(
+            TasksDatabaseHelper.TABLE_NAME,
+            arrayOf("id", "title", "content", "priority", "is_completed", "is_local"),
+            "id = ?",
+            arrayOf(taskId.toString()),
+            null, null, null
+        )
+
+        var task: Task? = null
+        with(cursor) {
+            if (moveToFirst()) {
+                val id = UUID.fromString(getString(getColumnIndexOrThrow("id")))
+                val title = getString(getColumnIndexOrThrow("title"))
+                val content = getString(getColumnIndexOrThrow("content"))
+                val priority = getInt(getColumnIndexOrThrow("priority"))
+                val isCompleted = getInt(getColumnIndexOrThrow("is_completed")) != 0
+                val isLocal = getInt(getColumnIndexOrThrow("is_local")) != 0
+
+                task = Task(
+                    id,
+                    title,
+                    content,
+                    priority,
+                    isCompleted,
+                    isLocal
+                )
+            }
+            close()
+        }
+        return task
+    }
+
     fun updateSortOrders(tasks: List<Task>) {
         val db = dbHelper.writableDatabase
         db.beginTransaction()

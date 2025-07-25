@@ -10,11 +10,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,6 +26,8 @@ import com.incloudlogic.taskmanager.domain.entity.Task
 import com.incloudlogic.taskmanager.ui.adapter.CustomAdapter
 import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
 import com.incloudlogic.taskmanager.ui.listener.OnTaskCompletedClickListener
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener {
@@ -208,7 +212,7 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
 
     private fun createItemTouchCallback(adapter: CustomAdapter) =
         object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -222,6 +226,23 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val taskId = (viewHolder as CustomAdapter.TaskViewHolder).taskId!!
+
+                val builder = MaterialAlertDialogBuilder(context)
+                    .setTitle(getString(R.string.delete_task))
+                    .setMessage(getString(R.string.delete_task_confirmation))
+                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            dao.delete(taskId)
+                        }
+                        adapter.removeAt(position)
+                    }
+                    .setNegativeButton(getString(R.string.no)) { _, _ ->
+                        adapter.notifyItemChanged(position)
+                    }
+
+                builder.show()
             }
 
             override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
@@ -264,8 +285,17 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
     }
 
     private fun updateSortedTasks(sorted: List<Task>) {
-        val localSorted = sorted.filter { it.isLocal }
-        val icPlatformSorted = sorted.filter { !it.isLocal }
+        // Update sort order based on the new sorted list
+        val sortedWithOrder = sorted.mapIndexed { index, task ->
+            task.copy(sortOrder = index)
+        }
+        
+        // Save the new sort order to database
+        dao.updateSortOrders(sortedWithOrder)
+        
+        // Update adapters with sorted data
+        val localSorted = sortedWithOrder.filter { it.isLocal }
+        val icPlatformSorted = sortedWithOrder.filter { !it.isLocal }
 
         localAdapter.updateData(localSorted)
         icPlatformAdapter.updateData(icPlatformSorted)

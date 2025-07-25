@@ -2,7 +2,7 @@ package com.incloudlogic.taskmanager.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.incloudlogic.taskmanager.model.User
+import com.incloudlogic.taskmanager.domain.entity.User
 
 class SharedPreferencesManager(context: Context) {
     private val SP_EMAIL = "spEmail"
