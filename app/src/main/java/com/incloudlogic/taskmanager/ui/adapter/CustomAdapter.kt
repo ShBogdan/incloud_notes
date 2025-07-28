@@ -1,10 +1,13 @@
 package com.incloudlogic.taskmanager.ui.adapter
 
+import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.incloudlogic.taskmanager.R
 import com.incloudlogic.taskmanager.domain.entity.Task
@@ -23,7 +26,7 @@ class CustomAdapter(
         var taskId: UUID? = null
         val title: TextView = view.findViewById(R.id.title)
         val content: TextView = view.findViewById(R.id.content)
-        val priority: ImageView = view.findViewById(R.id.priority)
+        val priority: View = view.findViewById(R.id.priority)
         val isCompleted: ImageView = view.findViewById(R.id.isCompleted)
     }
 
@@ -36,20 +39,38 @@ class CustomAdapter(
     override fun onBindViewHolder(taskViewHolder: TaskViewHolder, position: Int) {
         val task = dataSet[position]
         taskViewHolder.taskId = task.id
-        
-        // Ensure priority image is always properly set
-        when (task.priority) {
-            0 -> taskViewHolder.priority.setImageResource(R.drawable.priority_critical_24)
-            1 -> taskViewHolder.priority.setImageResource(R.drawable.priority_major_24)
-            2 -> taskViewHolder.priority.setImageResource(R.drawable.priority_normal_24)
-            else -> taskViewHolder.priority.setImageResource(R.drawable.priority_normal_24) // Default fallback
+
+        val background = taskViewHolder.priority.background
+        if (background is GradientDrawable) {
+            background.setColor(ContextCompat.getColor(listener as Context, R.color.priority_critical))
         }
+
+        when (task.priority) {
+            0 -> (taskViewHolder.priority.background as? GradientDrawable)
+                ?.setColor(ContextCompat.getColor(listener as Context, R.color.priority_critical))
+            1 -> (taskViewHolder.priority.background as? GradientDrawable)
+                ?.setColor(ContextCompat.getColor(listener as Context, R.color.priority_major))
+            2 -> (taskViewHolder.priority.background as? GradientDrawable)
+                ?.setColor(ContextCompat.getColor(listener as Context, R.color.priority_normal))
+            else -> (taskViewHolder.priority.background as? GradientDrawable)
+                ?.setColor(ContextCompat.getColor(listener as Context, R.color.priority_normal))// Default fallback
+        }
+
+        val colorRes = when (task.priority) {
+            0 -> R.color.priority_critical
+            1 -> R.color.priority_major
+            2 -> R.color.priority_normal
+            else -> R.color.priority_normal
+        }
+        val color = ContextCompat.getColor(listener as Context, colorRes)
 
         // Ensure completion state is always properly set
         if (task.isCompleted) {
             taskViewHolder.isCompleted.setImageResource(R.drawable.check_box_24)
+            taskViewHolder.isCompleted.setColorFilter(color)
         } else {
             taskViewHolder.isCompleted.setImageResource(R.drawable.check_box_blank_24)
+            taskViewHolder.isCompleted.setColorFilter(color)
         }
         
         taskViewHolder.title.text = task.title

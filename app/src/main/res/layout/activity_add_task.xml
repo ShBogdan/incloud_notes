@@ -16,6 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="16dp"
         android:text="@string/new_task"
+        android:textColor="@color/text_primary"
         android:textSize="24sp" />
 
     <Spinner
@@ -30,7 +31,9 @@
         android:maxLines="1"
         android:padding="12dp"
         android:textSize="20sp"
-        android:entries="@array/tasks"/>
+        android:entries="@array/tasks"
+        android:textColor="@color/text_primary"
+        />
 
     <Spinner
         android:id="@+id/taskPriority"
@@ -44,7 +47,9 @@
         android:maxLines="1"
         android:padding="12dp"
         android:textSize="20sp"
-        android:entries="@array/priority"/>
+        android:entries="@array/priority"
+        android:textColor="@color/text_primary"
+        />
 
     <EditText
         android:id="@+id/taskContent"
@@ -52,6 +57,7 @@
         android:layout_height="360dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/task_border"
+        android:textColor="@color/text_secondary"
         android:layout_below="@+id/taskPriority"
         android:gravity="top"
         android:hint="@string/enter_the_description"

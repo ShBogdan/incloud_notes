@@ -18,18 +18,17 @@
         app:selectionRequired="false">
 
 
-        <!-- Кнопка с текстом -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_sort_label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:text="Sorting"
+            android:text="@string/sorting"
             android:textAlignment="textEnd"
             android:clickable="false"
+            android:textColor="@color/text_secondary"
             style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
-        <!-- Кнопки с иконками -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_sort_complete"
             android:layout_width="0dp"
@@ -49,7 +48,9 @@
             android:layout_weight="1"
             app:iconGravity="textEnd"
             app:iconTint="?attr/colorOnSurface"
+            android:textColor="?attr/colorOnSurface"
             app:iconSize="24dp"
+            android:textSize="8pt"
             android:text="T"
             android:textStyle="bold"
             style="@style/Widget.MaterialComponents.Button.TextButton"/>
@@ -59,7 +60,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:icon="@drawable/priority_normal_24"
+            app:icon="@drawable/priority_24"
             app:iconGravity="textEnd"
             app:iconTint="?attr/colorOnSurface"
             app:iconSize="24dp"

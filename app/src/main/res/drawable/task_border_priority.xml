@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@color/priority_major" />
+
+    <corners
+        android:topLeftRadius="4dp"
+        android:bottomLeftRadius="4dp"
+        android:topRightRadius="0dp"
+        android:bottomRightRadius="0dp" />
+</shape>
+
+
+
+
+<!--    <?xml version="1.0" encoding="utf-8"?>-->
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--&lt;!&ndash; Нижний слой (большой, основной фон) &ndash;&gt;-->
+<!--<item>-->
+<!--    <shape android:shape="rectangle">-->
+<!--        <solid android:color="#FED277" />-->
+<!--        <corners-->
+<!--            android:topLeftRadius="0dp"-->
+<!--            android:bottomLeftRadius="0dp"-->
+<!--            android:topRightRadius="8dp"-->
+<!--            android:bottomRightRadius="8dp" />-->
+<!--    </shape>-->
+<!--</item>-->
+
+<!--&lt;!&ndash; Верхний слой (меньше и другой цвет) &ndash;&gt;-->
+<!--<item-->
+<!--    android:left="0dp"-->
+<!--    android:top="4dp"-->
+<!--    android:right="4dp"-->
+<!--    android:bottom="4dp">-->
+<!--    <shape android:shape="rectangle">-->
+<!--        <solid android:color="#FFFFFF" />-->
+<!--        <corners-->
+<!--            android:topLeftRadius="0dp"-->
+<!--            android:bottomLeftRadius="0dp"-->
+<!--            android:topRightRadius="4dp"-->
+<!--            android:bottomRightRadius="4dp" />-->
+<!--    </shape>-->
+<!--</item>-->
+
+<!--</layer-list>-->

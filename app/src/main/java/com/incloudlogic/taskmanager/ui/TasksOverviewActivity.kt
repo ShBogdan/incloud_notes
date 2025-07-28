@@ -1,11 +1,14 @@
 package com.incloudlogic.taskmanager.ui
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -24,8 +27,8 @@ import com.incloudlogic.taskmanager.R
 import com.incloudlogic.taskmanager.data.local.TaskDao
 import com.incloudlogic.taskmanager.domain.entity.Task
 import com.incloudlogic.taskmanager.ui.adapter.CustomAdapter
-import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
 import com.incloudlogic.taskmanager.ui.listener.OnTaskCompletedClickListener
+import com.incloudlogic.taskmanager.utils.EdgeToEdgeUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -229,23 +232,44 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
                 val position = viewHolder.adapterPosition
                 val taskId = (viewHolder as CustomAdapter.TaskViewHolder).taskId!!
 
-                val builder = MaterialAlertDialogBuilder(context)
-                    .setTitle(getString(R.string.delete_task))
-                    .setMessage(getString(R.string.delete_task_confirmation))
-                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            dao.delete(taskId)
-                        }
-                        adapter.removeAt(position)
-                    }
-                    .setNegativeButton(getString(R.string.no)) { _, _ ->
-                        adapter.notifyItemChanged(position)
-                    }
+                val dialogView = LayoutInflater.from(context).inflate(R.layout.custom_alert_dialog, null)
+                val dialog = Dialog(context)
 
-                builder.show()
+                dialog.apply {
+                    setContentView(dialogView)
+                    setCancelable(true)
+                    window?.setBackgroundDrawableResource(android.R.color.transparent)
+                }
+
+                // Настройка размера
+                dialog.setOnShowListener {
+                    dialog.window?.setLayout(
+                        (resources.displayMetrics.widthPixels * 0.8).toInt(),
+                        WindowManager.LayoutParams.WRAP_CONTENT
+                    )
+                }
+
+                // Обработчики кнопок
+                dialogView.findViewById<Button>(R.id.btn_positive).setOnClickListener {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        dao.delete(taskId)
+                    }
+                    adapter.removeAt(position)
+                    dialog.dismiss()
+                }
+
+                dialogView.findViewById<Button>(R.id.btn_negative).setOnClickListener {
+                    adapter.notifyItemChanged(position)
+                    dialog.dismiss()
+                }
+
+                dialog.show()
             }
 
-            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
                 super.clearView(recyclerView, viewHolder)
                 // Save the new sort order to database when drag is complete
                 adapter.saveSortOrder()
@@ -289,10 +313,10 @@ class TasksOverviewActivity : AppCompatActivity(), OnTaskCompletedClickListener 
         val sortedWithOrder = sorted.mapIndexed { index, task ->
             task.copy(sortOrder = index)
         }
-        
+
         // Save the new sort order to database
         dao.updateSortOrders(sortedWithOrder)
-        
+
         // Update adapters with sorted data
         val localSorted = sortedWithOrder.filter { it.isLocal }
         val icPlatformSorted = sortedWithOrder.filter { !it.isLocal }

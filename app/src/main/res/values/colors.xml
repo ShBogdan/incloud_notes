@@ -4,13 +4,23 @@
     <color name="task_border">#d7dadb</color>
     <color name="color_primary">#497371</color>
 
-    <color name="priority_normal">#4CAF50</color>
-    <color name="priority_major">#FF9800</color>
-    <color name="priority_critical">#F44336</color>
+    <color name="priority_normal">#C0E3C8</color>
+    <color name="priority_major">#FED277</color>
+    <color name="priority_critical">#E254A4</color>
 
-    <color name="tab_indicator_layout">#59cee3</color>
-    <color name="tab_selected_text">#283878</color>
-    <color name="tab_text">#686B83</color>
     <color name="tab_background">#F6F6F6</color>
+    <color name="tab_indicator_layout">@color/text_secondary</color>
+    <color name="tab_selected_text">@color/text_primary</color>
+    <color name="tab_text">#686B83</color>
+
+    <color name="text_primary">#2d3748</color>
+    <color name="text_secondary">#718096</color>
+
+    <color name="task_completed">#10b981</color>
+    <color name="task_in_progress">#3b82f6</color>
+    <color name="task_important">#f59e0b</color>
+    <color name="task_special">#8b5cf6</color>
+    <color name="task_urgent">#ef4444</color>
+    <color name="task_normal">#64748b</color>
 
 </resources>

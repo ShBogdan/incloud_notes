@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.viewpager2)
-    
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
 //    // ViewModel and LiveData
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 //    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")

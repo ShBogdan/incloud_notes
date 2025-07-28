@@ -35,6 +35,20 @@ class AddTaskActivity : AppCompatActivity() {
         taskPriority = findViewById(R.id.taskPriority)
         taskContent = findViewById(R.id.taskContent)
         createButton = findViewById(R.id.createButton)
+        
+        taskPriority.onItemSelectedListener = object : android.widget.AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: android.widget.AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
+                val priorityText = taskPriority.selectedItem.toString()
+                val colorRes = when (priorityText) {
+                    "Normal" -> R.color.priority_normal
+                    "Major" -> R.color.priority_major
+                    "Critical" -> R.color.priority_critical
+                    else -> R.color.priority_normal
+                }
+                (view as? android.widget.TextView)?.setTextColor(getColor(colorRes))
+            }
+            override fun onNothingSelected(parent: android.widget.AdapterView<*>?) {}
+        }
     }
 
     private fun setupCreateTaskButton() {
@@ -74,7 +88,7 @@ class AddTaskActivity : AppCompatActivity() {
                 "Critical" -> 0
                 else -> 2
             }
-            
+
             val taskDao = TaskDao(this)
             
             if (isEditMode && taskId != null) {
